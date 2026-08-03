@@ -1,21 +1,42 @@
 import "@servicenow/sdk/global";
 import { Record } from "@servicenow/sdk/core";
 
-const settings = [
-  { key: "default-root-ci", name: "default_root_ci", value: "CAROL3-GATEWAY" },
-  { key: "max-depth", name: "max_depth", value: "2" },
-  { key: "max-nodes", name: "max_nodes", value: "250" },
-  { key: "gesture-confidence-threshold", name: "gesture_confidence_threshold", value: "0.7" },
-];
+Record({
+  $id: Now.ID["gcmdb-config-default-root-ci"],
+  table: "x_tusm_gcmdb_config",
+  data: {
+    x_tusm_gcmdb_setting_name: "default_root_ci",
+    x_tusm_gcmdb_setting_value: "CAROL3-GATEWAY",
+    x_tusm_gcmdb_active: true,
+  },
+});
 
-settings.forEach((setting) => {
-  Record({
-    $id: Now.ID[`gcmdb-config-${setting.key}`],
-    table: "x_tusm_gcmdb_config",
-    data: {
-      x_tusm_gcmdb_setting_name: setting.name,
-      x_tusm_gcmdb_setting_value: setting.value,
-      x_tusm_gcmdb_active: true,
-    },
-  });
+Record({
+  $id: Now.ID["gcmdb-config-max-depth"],
+  table: "x_tusm_gcmdb_config",
+  data: {
+    x_tusm_gcmdb_setting_name: "max_depth",
+    x_tusm_gcmdb_setting_value: "2",
+    x_tusm_gcmdb_active: true,
+  },
+});
+
+Record({
+  $id: Now.ID["gcmdb-config-max-nodes"],
+  table: "x_tusm_gcmdb_config",
+  data: {
+    x_tusm_gcmdb_setting_name: "max_nodes",
+    x_tusm_gcmdb_setting_value: "250",
+    x_tusm_gcmdb_active: true,
+  },
+});
+
+Record({
+  $id: Now.ID["gcmdb-config-gesture-confidence-threshold"],
+  table: "x_tusm_gcmdb_config",
+  data: {
+    x_tusm_gcmdb_setting_name: "gesture_confidence_threshold",
+    x_tusm_gcmdb_setting_value: "0.7",
+    x_tusm_gcmdb_active: true,
+  },
 });
