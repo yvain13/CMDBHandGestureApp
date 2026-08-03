@@ -1,6 +1,7 @@
 import "@servicenow/sdk/global";
 import { RestApi } from "@servicenow/sdk/core";
 import { process as processGraph } from "../../server/graph/graph-handler";
+import { process as processCi } from "../../server/graph/ci-handler";
 import { restExecute } from "../acls/index.now";
 
 export const gcmdbApi = RestApi({
@@ -21,6 +22,13 @@ export const gcmdbApi = RestApi({
         { $id: Now.ID["gcmdb-param-root"], name: "root" },
         { $id: Now.ID["gcmdb-param-depth"], name: "depth" },
       ],
+    },
+    {
+      $id: Now.ID["gcmdb-route-ci"],
+      name: "ci",
+      path: "/ci/{sys_id}",
+      method: "GET",
+      script: processCi,
     },
   ],
 });
