@@ -14,7 +14,12 @@
         "types": "now-sdk dependencies"
     },
     "devDependencies": {
+        "@servicenow/glide": "27.0.5",
         "@servicenow/sdk": "4.6.0",
-        "@servicenow/glide": "27.0.5"
+        "@types/react": "^19.2.18",
+        "react": "^19.2.8"
+    },
+    "dependencies": {
+        "@mediapipe/tasks-vision": "^0.10.14"
     }
 }
