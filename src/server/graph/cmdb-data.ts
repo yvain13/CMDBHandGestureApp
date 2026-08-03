@@ -23,9 +23,8 @@ export function fetchEdgesForFrontier(frontierIds: string[]): RelEdge[] {
   if (frontierIds.length === 0) return edges;
 
   const gr = new GlideRecord("cmdb_rel_ci");
-  gr.addQuery("parent", "IN", frontierIds.join(","));
-  // Using query string to handle OR condition where addOrCondition is not available in type definitions
-  (gr as any).addOrCondition("child", "IN", frontierIds.join(","));
+  const qc = gr.addQuery("parent", "IN", frontierIds.join(","));
+  qc.addOrCondition("child", "IN", frontierIds.join(","));
   gr.query();
   while (gr.next()) {
     edges.push({
