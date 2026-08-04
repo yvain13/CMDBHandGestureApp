@@ -1,0 +1,55 @@
+/* src/client/app.css */
+.app {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  background: var(--now-color-background-secondary);
+  color: var(--now-color-text-primary);
+  overflow: hidden;
+}
+
+.app__header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--now-spacing-sm) var(--now-spacing-md);
+  font-size: 13px;
+  z-index: 2;
+}
+
+.app__reset {
+  padding: var(--now-spacing-xs) var(--now-spacing-sm);
+  border-radius: var(--now-border-radius-sm);
+  border: 1px solid var(--now-color-border-primary);
+  background: transparent;
+  color: var(--now-color-text-primary);
+  cursor: pointer;
+  font-size: 11px;
+}
+
+.app__canvas {
+  position: absolute;
+  inset: 0;
+}
+
+.app__detail {
+  position: absolute;
+  bottom: var(--now-spacing-lg);
+  left: var(--now-spacing-lg);
+  z-index: 2;
+}
+
+.app__webcam {
+  position: absolute;
+  bottom: var(--now-spacing-lg);
+  right: var(--now-spacing-lg);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--now-spacing-sm);
+  z-index: 2;
+}
