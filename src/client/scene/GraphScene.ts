@@ -14,6 +14,7 @@ export class GraphScene {
   private nodeOrder: string[] = [];
   private positions = new Map<string, LayoutNode>();
   private container: HTMLElement;
+  private rafId: number | null = null;
 
   constructor(container: HTMLElement) {
     this.container = container;
@@ -48,12 +49,24 @@ export class GraphScene {
   private renderLoop = () => {
     this.selectionRing.lookAt(this.camera.position);
     this.renderer.render(this.scene, this.camera);
-    requestAnimationFrame(this.renderLoop);
+    this.rafId = requestAnimationFrame(this.renderLoop);
   };
+
+  private disposeGraphResources() {
+    if (this.mesh) {
+      this.mesh.geometry.dispose();
+      (this.mesh.material as THREE.Material).dispose();
+    }
+    if (this.edgeLines) {
+      this.edgeLines.geometry.dispose();
+      (this.edgeLines.material as THREE.Material).dispose();
+    }
+  }
 
   setGraph(nodes: GraphNode[], edges: GraphEdgeInput[]) {
     if (this.mesh) this.scene.remove(this.mesh);
     if (this.edgeLines) this.scene.remove(this.edgeLines);
+    this.disposeGraphResources();
 
     this.positions = computeLayout(nodes.map((n) => n.id), edges, 300);
     const objects = buildGraphObjects(nodes, edges, this.positions);
@@ -98,7 +111,11 @@ export class GraphScene {
   }
 
   dispose() {
+    if (this.rafId !== null) cancelAnimationFrame(this.rafId);
     window.removeEventListener("resize", this.handleResize);
+    this.disposeGraphResources();
+    this.selectionRing.geometry.dispose();
+    (this.selectionRing.material as THREE.Material).dispose();
     this.renderer.dispose();
     this.container.removeChild(this.renderer.domElement);
   }
