@@ -1,0 +1,40 @@
+/* src/client/components/DetailCard.css */
+.detail-card {
+  width: 220px;
+  padding: var(--now-spacing-md);
+  border-radius: var(--now-border-radius-md);
+  background: var(--now-color-background-primary);
+  border: 1px solid var(--now-color-border-primary);
+  color: var(--now-color-text-primary);
+}
+
+.detail-card__name {
+  font-weight: 600;
+  margin-bottom: var(--now-spacing-sm);
+}
+
+.detail-card__row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--now-color-text-secondary);
+  margin-bottom: 4px;
+}
+
+.detail-card__incident {
+  font-size: 12px;
+  color: #e5484d;
+  margin-top: 4px;
+}
+
+.detail-card__expand {
+  margin-top: var(--now-spacing-sm);
+  width: 100%;
+  padding: var(--now-spacing-xs) var(--now-spacing-sm);
+  border-radius: var(--now-border-radius-sm);
+  border: 1px solid var(--now-color-border-primary);
+  background: transparent;
+  color: var(--now-color-text-primary);
+  cursor: pointer;
+  font-size: 11px;
+}
