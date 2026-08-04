@@ -9,12 +9,14 @@ interface CameraPreviewProps {
 
 export default function CameraPreview({ videoRef, landmarks, onStarted }: CameraPreviewProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const streamRef = useRef<MediaStream | null>(null);
   const [started, setStarted] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const startCamera = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      streamRef.current = stream;
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
         await videoRef.current.play();
@@ -45,6 +47,12 @@ export default function CameraPreview({ videoRef, landmarks, onStarted }: Camera
       ctx.fill();
     });
   }, [landmarks, videoRef]);
+
+  useEffect(() => {
+    return () => {
+      streamRef.current?.getTracks().forEach((track) => track.stop());
+    };
+  }, []);
 
   return (
     <div className="camera-preview">
