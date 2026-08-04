@@ -71,7 +71,11 @@ export function useGraphData() {
 
   const reset = useCallback(() => {
     clearSelection();
-    if (rootId) loadGraph(rootId);
+    if (rootId) {
+      loadGraph(rootId).catch((error) => {
+        console.error("Failed to reset graph:", error);
+      });
+    }
   }, [rootId, loadGraph, clearSelection]);
 
   return { graph, selectedCI, loadGraph, selectCI, clearSelection, reset };
