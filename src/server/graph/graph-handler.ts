@@ -70,5 +70,16 @@ export function process(request: any, response: any) {
     };
   });
 
-  response.setBody({ result: { root: rootId, nodes, edges: allEdges, truncated } });
+  // Drop dangling edges (far endpoint skipped by the maxNodes budget) and dedupe:
+  // fetchEdgesForFrontier matches parent OR child, so edges reappear on the next hop.
+  const nodeIdSet = new Set(nodeIds);
+  const dedupedEdges = new Map<string, EdgeRecord>();
+  allEdges.forEach((edge) => {
+    if (!nodeIdSet.has(edge.source) || !nodeIdSet.has(edge.target)) return;
+    const key = `${edge.source}|${edge.target}|${edge.type}`;
+    dedupedEdges.set(key, edge);
+  });
+  const edges = [...dedupedEdges.values()];
+
+  response.setBody({ result: { root: rootId, nodes, edges, truncated } });
 }

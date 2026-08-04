@@ -106,8 +106,24 @@ export class GraphScene {
     const raycaster = new THREE.Raycaster();
     raycaster.setFromCamera(new THREE.Vector2(ndcX, ndcY), this.camera);
     const hits = raycaster.intersectObject(this.mesh);
-    if (hits.length === 0 || hits[0].instanceId === undefined) return null;
-    return this.nodeOrder[hits[0].instanceId];
+    if (hits.length > 0 && hits[0].instanceId !== undefined) {
+      return this.nodeOrder[hits[0].instanceId];
+    }
+
+    // Exact ray-sphere hits are hard to land with a fingertip; fall back to the
+    // nearest node by projected-screen distance within a threshold.
+    const pointer = new THREE.Vector2(ndcX, ndcY);
+    let closestId: string | null = null;
+    let closestDist = 0.08;
+    this.positions.forEach((pos, id) => {
+      const projected = new THREE.Vector3(pos.x, pos.y, pos.z).project(this.camera);
+      const dist = pointer.distanceTo(new THREE.Vector2(projected.x, projected.y));
+      if (dist < closestDist) {
+        closestDist = dist;
+        closestId = id;
+      }
+    });
+    return closestId;
   }
 
   dispose() {

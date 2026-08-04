@@ -42,8 +42,17 @@ async function apiGet<T>(path: string): Promise<T> {
   const response = await fetch(API_BASE + path, {
     headers: { Accept: "application/json", "X-UserToken": (window as any).g_ck },
   });
+  if (!response.ok) {
+    let message = `Request failed: ${response.status}`;
+    try {
+      const body = await response.json();
+      message = body.error?.message || message;
+    } catch {
+      // response body wasn't JSON (e.g. an HTML error/login page)
+    }
+    throw new Error(message);
+  }
   const body = await response.json();
-  if (!response.ok) throw new Error(body.error?.message || "Request failed");
   return body.result as T;
 }
 
@@ -51,32 +60,40 @@ export function useGraphData() {
   const [graph, setGraph] = useState<GraphResponse | null>(null);
   const [selectedCI, setSelectedCI] = useState<CIDetail | null>(null);
   const [rootId, setRootId] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const loadGraph = useCallback(async (root?: string, depth?: number) => {
-    const params = new URLSearchParams();
-    if (root) params.set("root", root);
-    if (depth) params.set("depth", String(depth));
-    const result = await apiGet<GraphResponse>(`/graph?${params.toString()}`);
-    setGraph(result);
-    setRootId(result.root);
-    return result;
+    try {
+      setError(null);
+      const params = new URLSearchParams();
+      if (root) params.set("root", root);
+      if (depth) params.set("depth", String(depth));
+      const result = await apiGet<GraphResponse>(`/graph?${params.toString()}`);
+      setGraph(result);
+      setRootId(result.root);
+      return result;
+    } catch (e) {
+      setError(e instanceof Error ? e.message : String(e));
+      return null;
+    }
   }, []);
 
   const selectCI = useCallback(async (sysId: string) => {
-    const result = await apiGet<CIDetail>(`/ci/${sysId}`);
-    setSelectedCI(result);
+    try {
+      setError(null);
+      const result = await apiGet<CIDetail>(`/ci/${sysId}`);
+      setSelectedCI(result);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : String(e));
+    }
   }, []);
 
   const clearSelection = useCallback(() => setSelectedCI(null), []);
 
   const reset = useCallback(() => {
     clearSelection();
-    if (rootId) {
-      loadGraph(rootId).catch((error) => {
-        console.error("Failed to reset graph:", error);
-      });
-    }
+    if (rootId) loadGraph(rootId);
   }, [rootId, loadGraph, clearSelection]);
 
-  return { graph, selectedCI, loadGraph, selectCI, clearSelection, reset };
+  return { graph, selectedCI, error, loadGraph, selectCI, clearSelection, reset };
 }

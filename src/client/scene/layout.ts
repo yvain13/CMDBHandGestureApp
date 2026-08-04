@@ -22,7 +22,7 @@ export function computeLayout(
   const simulation = forceSimulation(nodes, 3)
     .force(
       "link",
-      forceLink(edges)
+      forceLink(edges.map((e) => ({ source: e.source, target: e.target })))
         .id((d: any) => d.id)
         .distance(40)
     )

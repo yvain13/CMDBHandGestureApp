@@ -32,7 +32,7 @@ export function nodeRadius(incidentCount: number): number {
 
 export function createNodeMesh(count: number): THREE.InstancedMesh {
   const geometry = new THREE.SphereGeometry(1, 16, 16);
-  const material = new THREE.MeshStandardMaterial({ vertexColors: true });
+  const material = new THREE.MeshStandardMaterial();
   const mesh = new THREE.InstancedMesh(geometry, material, count);
   mesh.instanceColor = new THREE.InstancedBufferAttribute(new Float32Array(count * 3), 3);
   return mesh;

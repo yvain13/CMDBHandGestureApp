@@ -17,7 +17,7 @@ export default function App() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const sceneRef = useRef<GraphScene | null>(null);
   const [landmarks, setLandmarks] = useState<RecognizedFrame["landmarks"]>(null);
-  const { graph, selectedCI, loadGraph, selectCI, reset } = useGraphData();
+  const { graph, selectedCI, error, loadGraph, selectCI, reset } = useGraphData();
   const { state, dispatchFrame } = useGestureStateMachine(GESTURE_CONFIG);
 
   useEffect(() => {
@@ -64,7 +64,7 @@ export default function App() {
     [dispatchFrame, handleCommand]
   );
 
-  const { ready } = useGestureRecognizer(videoRef, handleFrame, true);
+  const { ready, error: recognizerError } = useGestureRecognizer(videoRef, handleFrame, true);
   const rootNode = graph?.nodes.find((n) => n.id === graph.root);
 
   // Mouse fallback (design doc §9 NFR: full mouse control if camera is denied/unavailable).
@@ -89,12 +89,25 @@ export default function App() {
       <div className="app__header">
         <span>{rootNode ? rootNode.name : "Loading..."}</span>
         <span>depth: 2</span>
-        <span>{ready ? "● recognizer ready" : "○ loading recognizer"}</span>
+        <span>
+          {recognizerError
+            ? `⚠ recognizer failed: ${recognizerError}`
+            : ready
+              ? "● recognizer ready"
+              : "○ loading recognizer"}
+        </span>
         <button className="app__reset" onClick={reset}>
           Reset (mouse fallback for Closed_Fist)
         </button>
       </div>
+      {error && <div className="app__error">{error}</div>}
       <div ref={canvasContainerRef} className="app__canvas" onClick={handleCanvasClick} />
+      {landmarks && landmarks[8] && (
+        <div
+          className="app__crosshair"
+          style={{ left: `${(1 - landmarks[8].x) * 100}%`, top: `${landmarks[8].y * 100}%` }}
+        />
+      )}
       <div className="app__detail">
         <DetailCard ci={selectedCI} onExpand={handleExpandClick} />
       </div>
@@ -105,6 +118,10 @@ export default function App() {
           progress={state.candidateFrames / GESTURE_CONFIG.holdFrames}
           gestureLabel={state.candidateGesture}
         />
+        <p className="app__privacy-note">
+          Webcam video is processed on-device and never transmitted anywhere. The gesture-recognition
+          engine and model file are fetched from Google's CDN on first load.
+        </p>
       </div>
     </div>
   );
