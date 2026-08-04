@@ -1,0 +1,33 @@
+/* src/client/components/ArmingIndicator.css */
+.arming-indicator {
+  display: flex;
+  align-items: center;
+  gap: var(--now-spacing-sm);
+  color: var(--now-color-text-primary);
+}
+
+.arming-indicator__track {
+  fill: none;
+  stroke: var(--now-color-border-primary);
+  stroke-width: 4;
+}
+
+.arming-indicator__ring {
+  fill: none;
+  stroke: #00d4ff;
+  stroke-width: 4;
+  stroke-linecap: round;
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
+  transition: stroke-dashoffset 33ms linear;
+}
+
+.arming-indicator__ring--fired {
+  stroke: #4a5568;
+}
+
+.arming-indicator__label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
