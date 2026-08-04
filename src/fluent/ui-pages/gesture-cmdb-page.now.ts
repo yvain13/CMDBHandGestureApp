@@ -5,7 +5,7 @@ import page from "../../client/index.html";
 
 export const gestureCmdbPage = UiPage({
   $id: Now.ID["gesture-cmdb-page"],
-  endpoint: "x_tusm_gcmdb_page.do",
+  endpoint: "x_1433234_gcmdb_page.do",
   html: page,
   direct: true,
 });

@@ -36,7 +36,7 @@ export interface CIDetail {
   open_incidents: { number: string; priority: string }[];
 }
 
-const API_BASE = "/api/x_tusm_gcmdb/gesture_cmdb";
+const API_BASE = "/api/x_1433234_gcmdb/gesture_cmdb";
 
 async function apiGet<T>(path: string): Promise<T> {
   const response = await fetch(API_BASE + path, {

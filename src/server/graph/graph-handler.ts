@@ -1,12 +1,12 @@
-import { expandFrontier, EdgeRecord } from "./traversal";
-import { deriveHealth } from "./health";
+import { expandFrontier, EdgeRecord } from "./traversal.ts";
+import { deriveHealth } from "./health.ts";
 import {
   resolveRootId,
   fetchEdgesForFrontier,
   fetchCIRecords,
   fetchIncidentsForCIs,
-} from "./cmdb-data";
-import { getConfigValue } from "../config/config-service";
+} from "./cmdb-data.ts";
+import { getConfigValue } from "../config/config-service.ts";
 
 function getQueryParam(request: any, name: string): string {
   const val = request.queryParams[name];

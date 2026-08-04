@@ -18,7 +18,7 @@ export const gcmdbPageModule = Record({
     title: "Gesture CMDB Map",
     application: gcmdbMenu,
     link_type: "DIRECT",
-    query: "x_tusm_gcmdb_page.do",
+    query: "x_1433234_gcmdb_page.do",
     hint: "Camera features require opening this in its own browser tab, not this nav panel",
     roles: ["itil"],
     active: true,

@@ -4,7 +4,7 @@ import { Acl } from "@servicenow/sdk/core";
 export const configRead = Acl({
   $id: Now.ID["gcmdb-config-read"],
   type: "record",
-  table: "x_tusm_gcmdb_config",
+  table: "x_1433234_gcmdb_config",
   operation: "read",
   roles: ["itil", "admin"],
 });
@@ -12,7 +12,7 @@ export const configRead = Acl({
 export const configWrite = Acl({
   $id: Now.ID["gcmdb-config-write"],
   type: "record",
-  table: "x_tusm_gcmdb_config",
+  table: "x_1433234_gcmdb_config",
   operation: "write",
   roles: ["admin"],
 });

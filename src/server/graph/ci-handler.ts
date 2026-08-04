@@ -1,6 +1,6 @@
 import { GlideRecord } from "@servicenow/glide";
-import { deriveHealth } from "./health";
-import { fetchIncidentsForCIs } from "./cmdb-data";
+import { deriveHealth } from "./health.ts";
+import { fetchIncidentsForCIs } from "./cmdb-data.ts";
 
 function getPathParam(request: any, name: string): string {
   return request.pathParams[name] || "";

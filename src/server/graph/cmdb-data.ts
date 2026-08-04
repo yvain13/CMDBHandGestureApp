@@ -1,6 +1,6 @@
 import { GlideRecord } from "@servicenow/glide";
-import { RelEdge } from "./traversal";
-import { IncidentSummary } from "./health";
+import { RelEdge } from "./traversal.ts";
+import { IncidentSummary } from "./health.ts";
 
 const SYS_ID_PATTERN = /^[0-9a-f]{32}$/i;
 
