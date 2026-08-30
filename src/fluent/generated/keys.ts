@@ -160,9 +160,17 @@ declare global {
                     {
                         table: 'sn_glider_source_artifact_m2m'
                         id: '1b25f3600b5b4dbaa36e49392cb2eadd'
+                        deleted: true
                         key: {
                             application_file: 'd3c602efbf124d7e98f4bc565a817509'
                             source_artifact: '360ef4f06f2644539e9b2f10856ec372'
+                        }
+                    },
+                    {
+                        table: 'sys_ux_lib_asset'
+                        id: '20007118d7fb4fffa9d45f32712726d4'
+                        key: {
+                            name: 'x_1433234_gcmdb/vendor-three--a21f51c5'
                         }
                     },
                     {
@@ -220,6 +228,7 @@ declare global {
                     {
                         table: 'sn_glider_source_artifact_m2m'
                         id: '3bd4050930134b998931632e4e65a158'
+                        deleted: true
                         key: {
                             application_file: '8b170684a76646c6b1353d25023b60d2'
                             source_artifact: '360ef4f06f2644539e9b2f10856ec372'
@@ -232,6 +241,14 @@ declare global {
                             name: 'x_1433234_gcmdb_config'
                             element: 'x_1433234_gcmdb_setting_name'
                             language: 'en'
+                        }
+                    },
+                    {
+                        table: 'sn_glider_source_artifact_m2m'
+                        id: '3fb87d6a1f124808b8216933f6b58dc1'
+                        key: {
+                            application_file: '8aa29e3a4e084ee68d281272ef69e56c'
+                            source_artifact: '360ef4f06f2644539e9b2f10856ec372'
                         }
                     },
                     {
@@ -356,6 +373,13 @@ declare global {
                     },
                     {
                         table: 'sys_ux_lib_asset'
+                        id: '8aa29e3a4e084ee68d281272ef69e56c'
+                        key: {
+                            name: 'x_1433234_gcmdb/vendor-three--a21f51c5.js.map'
+                        }
+                    },
+                    {
+                        table: 'sys_ux_lib_asset'
                         id: '8aba5532c514494aa52fbd4b3cf320c5'
                         key: {
                             name: 'x_1433234_gcmdb/main'
@@ -364,6 +388,7 @@ declare global {
                     {
                         table: 'sys_ux_lib_asset'
                         id: '8b170684a76646c6b1353d25023b60d2'
+                        deleted: true
                         key: {
                             name: 'x_1433234_gcmdb/vendor-three--8cd8e86a.js.map'
                         }
@@ -503,6 +528,7 @@ declare global {
                     {
                         table: 'sys_ux_lib_asset'
                         id: 'd3c602efbf124d7e98f4bc565a817509'
+                        deleted: true
                         key: {
                             name: 'x_1433234_gcmdb/vendor-three--8cd8e86a'
                         }
@@ -521,6 +547,14 @@ declare global {
                         id: 'd76f1ef4945b414bb7fd985396602dd4'
                         key: {
                             name: 'x_1433234_gcmdb/vendor-react-dom--19e5e5b6'
+                        }
+                    },
+                    {
+                        table: 'sn_glider_source_artifact_m2m'
+                        id: 'f4d9b14e24e04dcc9695c212c69a3257'
+                        key: {
+                            application_file: '20007118d7fb4fffa9d45f32712726d4'
+                            source_artifact: '360ef4f06f2644539e9b2f10856ec372'
                         }
                     },
                     {

@@ -27,7 +27,7 @@ export function healthColor(health: Health): number {
 }
 
 export function nodeRadius(incidentCount: number): number {
-  return Math.min(0.6 + incidentCount * 0.15, 1.6);
+  return Math.min(2.2 + incidentCount * 0.5, 4.5);
 }
 
 export function createNodeMesh(count: number): THREE.InstancedMesh {

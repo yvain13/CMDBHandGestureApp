@@ -1,5 +1,18 @@
 /* src/client/app.css */
 .app {
+  /* A plain UiPage doesn't provide the Now Experience design tokens, and an
+     undefined var() invalidates the whole declaration (which is why the webcam
+     panel lost its bottom/right anchoring) — so define our own defaults. */
+  --now-spacing-xs: 4px;
+  --now-spacing-sm: 8px;
+  --now-spacing-md: 16px;
+  --now-spacing-lg: 24px;
+  --now-border-radius-sm: 4px;
+  --now-color-background-primary: #ffffff;
+  --now-color-background-secondary: #f7f8fa;
+  --now-color-border-primary: #d5d9dd;
+  --now-color-text-primary: #1a202c;
+  --now-color-text-secondary: #5f6b7a;
   position: relative;
   width: 100vw;
   height: 100vh;

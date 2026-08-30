@@ -8,6 +8,7 @@ import { Command } from "./gesture/stateMachine";
 import CameraPreview from "./components/CameraPreview";
 import ArmingIndicator from "./components/ArmingIndicator";
 import DetailCard from "./components/DetailCard";
+import GestureLegend from "./components/GestureLegend";
 import "./app.css";
 
 const GESTURE_CONFIG = { confidenceThreshold: 0.7, holdFrames: 6, cooldownMs: 600 };
@@ -118,6 +119,7 @@ export default function App() {
           progress={state.candidateFrames / GESTURE_CONFIG.holdFrames}
           gestureLabel={state.candidateGesture}
         />
+        <GestureLegend activeGesture={state.candidateGesture} />
         <p className="app__privacy-note">
           Webcam video is processed on-device and never transmitted anywhere. The gesture-recognition
           engine and model file are fetched from Google's CDN on first load.

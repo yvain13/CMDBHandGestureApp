@@ -1,0 +1,40 @@
+/* src/client/components/GestureLegend.css */
+.gesture-legend {
+  width: 240px;
+  padding: var(--now-spacing-sm);
+  border: 1px solid var(--now-color-border-primary);
+  border-radius: var(--now-border-radius-sm);
+  background: var(--now-color-background-primary, #fff);
+  font-size: 11px;
+}
+
+.gesture-legend__title {
+  margin-bottom: var(--now-spacing-xs);
+  font-weight: 600;
+  color: var(--now-color-text-secondary);
+}
+
+.gesture-legend__row {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  padding: 3px 4px;
+  border-radius: var(--now-border-radius-sm);
+}
+
+.gesture-legend__row--active {
+  background: rgba(0, 212, 255, 0.15);
+}
+
+.gesture-legend__icon {
+  flex-shrink: 0;
+}
+
+.gesture-legend__name {
+  flex-shrink: 0;
+  font-weight: 600;
+}
+
+.gesture-legend__action {
+  color: var(--now-color-text-secondary);
+}

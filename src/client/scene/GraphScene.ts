@@ -11,6 +11,8 @@ export class GraphScene {
   private mesh: THREE.InstancedMesh | null = null;
   private edgeLines: THREE.LineSegments | null = null;
   private selectionRing: THREE.Mesh;
+  // Graph objects live in a group that slowly spins so the layout reads as 3D.
+  private graphGroup = new THREE.Group();
   private nodeOrder: string[] = [];
   private positions = new Map<string, LayoutNode>();
   private container: HTMLElement;
@@ -28,12 +30,14 @@ export class GraphScene {
     dirLight.position.set(50, 50, 50);
     this.scene.add(dirLight);
 
+    this.scene.add(this.graphGroup);
+
     this.selectionRing = new THREE.Mesh(
-      new THREE.TorusGeometry(2, 0.1, 8, 24),
+      new THREE.TorusGeometry(5.5, 0.2, 8, 32),
       new THREE.MeshBasicMaterial({ color: SELECTED_COLOR })
     );
     this.selectionRing.visible = false;
-    this.scene.add(this.selectionRing);
+    this.graphGroup.add(this.selectionRing);
 
     window.addEventListener("resize", this.handleResize);
     this.renderLoop();
@@ -47,6 +51,7 @@ export class GraphScene {
   };
 
   private renderLoop = () => {
+    this.graphGroup.rotation.y += 0.0015;
     this.selectionRing.lookAt(this.camera.position);
     this.renderer.render(this.scene, this.camera);
     this.rafId = requestAnimationFrame(this.renderLoop);
@@ -64,8 +69,8 @@ export class GraphScene {
   }
 
   setGraph(nodes: GraphNode[], edges: GraphEdgeInput[]) {
-    if (this.mesh) this.scene.remove(this.mesh);
-    if (this.edgeLines) this.scene.remove(this.edgeLines);
+    if (this.mesh) this.graphGroup.remove(this.mesh);
+    if (this.edgeLines) this.graphGroup.remove(this.edgeLines);
     this.disposeGraphResources();
 
     this.positions = computeLayout(nodes.map((n) => n.id), edges, 300);
@@ -73,8 +78,8 @@ export class GraphScene {
     this.mesh = objects.mesh;
     this.edgeLines = objects.edgeLines;
     this.nodeOrder = objects.nodeOrder;
-    this.scene.add(this.mesh);
-    this.scene.add(this.edgeLines);
+    this.graphGroup.add(this.mesh);
+    this.graphGroup.add(this.edgeLines);
 
     this.fitCameraToNodes();
   }
@@ -85,8 +90,12 @@ export class GraphScene {
     const box = new THREE.Box3();
     points.forEach((p) => box.expandByPoint(new THREE.Vector3(p.x, p.y, p.z)));
     const sphere = box.getBoundingSphere(new THREE.Sphere());
-    const distance = sphere.radius / Math.sin((this.camera.fov * Math.PI) / 360) + sphere.radius;
-    this.camera.position.set(sphere.center.x, sphere.center.y, sphere.center.z + distance);
+    const distance = (sphere.radius / Math.sin((this.camera.fov * Math.PI) / 360)) * 1.15;
+    this.camera.position.set(
+      sphere.center.x,
+      sphere.center.y + distance * 0.15,
+      sphere.center.z + distance
+    );
     this.camera.lookAt(sphere.center);
   }
 
@@ -114,9 +123,13 @@ export class GraphScene {
     // nearest node by projected-screen distance within a threshold.
     const pointer = new THREE.Vector2(ndcX, ndcY);
     let closestId: string | null = null;
-    let closestDist = 0.08;
+    let closestDist = 0.12;
+    this.graphGroup.updateMatrixWorld();
     this.positions.forEach((pos, id) => {
-      const projected = new THREE.Vector3(pos.x, pos.y, pos.z).project(this.camera);
+      // Layout positions are group-local; the group spins, so project via world coords.
+      const projected = new THREE.Vector3(pos.x, pos.y, pos.z)
+        .applyMatrix4(this.graphGroup.matrixWorld)
+        .project(this.camera);
       const dist = pointer.distanceTo(new THREE.Vector2(projected.x, projected.y));
       if (dist < closestDist) {
         closestDist = dist;
