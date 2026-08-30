@@ -111,6 +111,13 @@ declare global {
                 }
                 composite: [
                     {
+                        table: 'sys_ux_lib_asset'
+                        id: '063361b4535e49d9a44e5b525bcd3376'
+                        key: {
+                            name: 'x_1433234_gcmdb/vendor-react-dom--19e5e5b6.js.map'
+                        }
+                    },
+                    {
                         table: 'sys_documentation'
                         id: '094142c26bf44e10b2b7477dd961c712'
                         key: {
@@ -124,6 +131,22 @@ declare global {
                         id: '1586e38372354b6ea3c92c599fcf05df'
                         key: {
                             endpoint: 'x_1433234_gcmdb_page.do'
+                        }
+                    },
+                    {
+                        table: 'sn_glider_source_artifact_m2m'
+                        id: '167ff2423aad4d19820901ac6404e9d5'
+                        key: {
+                            application_file: 'd76f1ef4945b414bb7fd985396602dd4'
+                            source_artifact: '360ef4f06f2644539e9b2f10856ec372'
+                        }
+                    },
+                    {
+                        table: 'sn_glider_source_artifact_m2m'
+                        id: '1b25f3600b5b4dbaa36e49392cb2eadd'
+                        key: {
+                            application_file: 'd3c602efbf124d7e98f4bc565a817509'
+                            source_artifact: '360ef4f06f2644539e9b2f10856ec372'
                         }
                     },
                     {
@@ -149,6 +172,14 @@ declare global {
                         }
                     },
                     {
+                        table: 'sn_glider_source_artifact_m2m'
+                        id: '3342c5d8cafc4f0db2c43a8db3f68ff8'
+                        key: {
+                            application_file: '063361b4535e49d9a44e5b525bcd3376'
+                            source_artifact: '360ef4f06f2644539e9b2f10856ec372'
+                        }
+                    },
+                    {
                         table: 'sys_db_object'
                         id: '34809304ac3542688a1e3494f279909b'
                         deleted: true
@@ -168,6 +199,14 @@ declare global {
                         id: '3bc7a809931b427cb1ab6b39b5bdc0ee'
                         key: {
                             name: 'x_1433234_gcmdb_config'
+                        }
+                    },
+                    {
+                        table: 'sn_glider_source_artifact_m2m'
+                        id: '3bd4050930134b998931632e4e65a158'
+                        key: {
+                            application_file: '8b170684a76646c6b1353d25023b60d2'
+                            source_artifact: '360ef4f06f2644539e9b2f10856ec372'
                         }
                     },
                     {
@@ -307,6 +346,13 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ux_lib_asset'
+                        id: '8b170684a76646c6b1353d25023b60d2'
+                        key: {
+                            name: 'x_1433234_gcmdb/vendor-three--8cd8e86a.js.map'
+                        }
+                    },
+                    {
                         table: 'sys_ws_query_parameter_map'
                         id: '963504664e794777a6bc3ed26775b837'
                         key: {
@@ -439,12 +485,26 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ux_lib_asset'
+                        id: 'd3c602efbf124d7e98f4bc565a817509'
+                        key: {
+                            name: 'x_1433234_gcmdb/vendor-three--8cd8e86a'
+                        }
+                    },
+                    {
                         table: 'sn_glider_source_artifact_m2m'
                         id: 'd68953532114433b9fa0052cd0bc9c31'
                         deleted: true
                         key: {
                             application_file: '98d11755b4554b8897229468288c99b1'
                             source_artifact: 'c7163331ae2a432da7ba1a479fab06f3'
+                        }
+                    },
+                    {
+                        table: 'sys_ux_lib_asset'
+                        id: 'd76f1ef4945b414bb7fd985396602dd4'
+                        key: {
+                            name: 'x_1433234_gcmdb/vendor-react-dom--19e5e5b6'
                         }
                     },
                     {

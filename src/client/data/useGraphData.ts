@@ -1,5 +1,6 @@
 // src/client/data/useGraphData.ts
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
+import { SAMPLE_GRAPH, sampleCIDetail } from "./sampleData";
 
 export interface GraphNodeData {
   id: string;
@@ -61,8 +62,17 @@ export function useGraphData() {
   const [selectedCI, setSelectedCI] = useState<CIDetail | null>(null);
   const [rootId, setRootId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  // Once the live API fails we stay in sample mode (ref, not state: the
+  // gesture-command callbacks capture loadGraph/selectCI on mount).
+  const sampleModeRef = useRef(false);
+  const [usingSampleData, setUsingSampleData] = useState(false);
 
   const loadGraph = useCallback(async (root?: string, depth?: number) => {
+    if (sampleModeRef.current) {
+      setGraph(SAMPLE_GRAPH);
+      setRootId(SAMPLE_GRAPH.root);
+      return SAMPLE_GRAPH;
+    }
     try {
       setError(null);
       const params = new URLSearchParams();
@@ -73,12 +83,22 @@ export function useGraphData() {
       setRootId(result.root);
       return result;
     } catch (e) {
-      setError(e instanceof Error ? e.message : String(e));
-      return null;
+      const message = e instanceof Error ? e.message : String(e);
+      sampleModeRef.current = true;
+      setUsingSampleData(true);
+      setError(`Live CMDB unavailable (${message}) — showing sample data`);
+      setGraph(SAMPLE_GRAPH);
+      setRootId(SAMPLE_GRAPH.root);
+      return SAMPLE_GRAPH;
     }
   }, []);
 
   const selectCI = useCallback(async (sysId: string) => {
+    if (sampleModeRef.current) {
+      const detail = sampleCIDetail(sysId);
+      if (detail) setSelectedCI(detail);
+      return;
+    }
     try {
       setError(null);
       const result = await apiGet<CIDetail>(`/ci/${sysId}`);
@@ -95,5 +115,5 @@ export function useGraphData() {
     if (rootId) loadGraph(rootId);
   }, [rootId, loadGraph, clearSelection]);
 
-  return { graph, selectedCI, error, loadGraph, selectCI, clearSelection, reset };
+  return { graph, selectedCI, error, usingSampleData, loadGraph, selectCI, clearSelection, reset };
 }

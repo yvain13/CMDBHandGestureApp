@@ -44,6 +44,20 @@
   text-align: center;
 }
 
+.app__notice {
+  position: absolute;
+  top: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  padding: var(--now-spacing-xs) var(--now-spacing-md);
+  border-radius: var(--now-border-radius-sm);
+  background: #b8860b;
+  color: white;
+  font-size: 12px;
+  text-align: center;
+}
+
 .app__canvas {
   position: absolute;
   inset: 0;

@@ -17,7 +17,7 @@ export default function App() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const sceneRef = useRef<GraphScene | null>(null);
   const [landmarks, setLandmarks] = useState<RecognizedFrame["landmarks"]>(null);
-  const { graph, selectedCI, error, loadGraph, selectCI, reset } = useGraphData();
+  const { graph, selectedCI, error, usingSampleData, loadGraph, selectCI, reset } = useGraphData();
   const { state, dispatchFrame } = useGestureStateMachine(GESTURE_CONFIG);
 
   useEffect(() => {
@@ -100,7 +100,7 @@ export default function App() {
           Reset (mouse fallback for Closed_Fist)
         </button>
       </div>
-      {error && <div className="app__error">{error}</div>}
+      {error && <div className={usingSampleData ? "app__notice" : "app__error"}>{error}</div>}
       <div ref={canvasContainerRef} className="app__canvas" onClick={handleCanvasClick} />
       {landmarks && landmarks[8] && (
         <div
