@@ -2,6 +2,7 @@ import { expandFrontier, EdgeRecord } from "./traversal.ts";
 import { deriveHealth } from "./health.ts";
 import {
   resolveRootId,
+  findAnyRelatedRootId,
   fetchEdgesForFrontier,
   fetchCIRecords,
   fetchIncidentsForCIs,
@@ -15,8 +16,16 @@ function getQueryParam(request: any, name: string): string {
 }
 
 export function process(request: any, response: any) {
-  const rootParam = getQueryParam(request, "root") || getConfigValue("default_root_ci");
-  const rootId = resolveRootId(rootParam);
+  const explicitRoot = getQueryParam(request, "root");
+  const rootParam = explicitRoot || getConfigValue("default_root_ci");
+  let rootId = resolveRootId(rootParam);
+
+  // The seeded default root name may not exist in this instance's CMDB data;
+  // fall back to any related CI rather than failing the initial load. An
+  // explicitly requested root that doesn't resolve is still a 404.
+  if (!rootId && !explicitRoot) {
+    rootId = findAnyRelatedRootId();
+  }
 
   if (!rootId) {
     response.setStatus(404);

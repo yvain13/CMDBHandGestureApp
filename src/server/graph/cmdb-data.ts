@@ -18,6 +18,18 @@ export function resolveRootId(rootParam: string): string {
   return "";
 }
 
+// Fallback when the configured default root CI doesn't exist on this instance:
+// any CI that participates in a relationship makes a workable default root.
+export function findAnyRelatedRootId(): string {
+  const gr = new GlideRecord("cmdb_rel_ci");
+  gr.setLimit(1);
+  gr.query();
+  if (gr.next()) {
+    return String(gr.getValue("parent"));
+  }
+  return "";
+}
+
 export function fetchEdgesForFrontier(frontierIds: string[]): RelEdge[] {
   const edges: RelEdge[] = [];
   if (frontierIds.length === 0) return edges;
