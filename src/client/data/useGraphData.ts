@@ -46,9 +46,14 @@ export interface CIDetail {
 const API_BASE = "/api/x_1433234_gcmdb/gesture_cmdb";
 
 async function apiGet<T>(path: string): Promise<T> {
-  const response = await fetch(API_BASE + path, {
-    headers: { Accept: "application/json", "X-UserToken": (window as any).g_ck },
-  });
+  const headers: Record<string, string> = { Accept: "application/json" };
+  // Session-cookie REST calls need the CSRF token, but only send it when the
+  // page actually provides one — a literal "undefined" header gets rejected
+  // even on requests that would otherwise pass.
+  const sessionToken = (window as any).g_ck;
+  if (sessionToken) headers["X-UserToken"] = sessionToken;
+
+  const response = await fetch(API_BASE + path, { headers });
   if (!response.ok) {
     let message = `Request failed: ${response.status}`;
     try {
@@ -57,6 +62,7 @@ async function apiGet<T>(path: string): Promise<T> {
     } catch {
       // response body wasn't JSON (e.g. an HTML error/login page)
     }
+    console.error(`[TouchlessWarRoom] GET ${API_BASE + path} -> ${response.status}: ${message}`);
     throw new Error(message);
   }
   const body = await response.json();
