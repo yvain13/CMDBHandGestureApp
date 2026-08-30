@@ -13,6 +13,7 @@ export class GraphScene {
   private selectionRing: THREE.Mesh;
   // Graph objects live in a group that slowly spins so the layout reads as 3D.
   private graphGroup = new THREE.Group();
+  private particles: THREE.Points;
   private nodeOrder: string[] = [];
   private positions = new Map<string, LayoutNode>();
   private container: HTMLElement;
@@ -24,11 +25,38 @@ export class GraphScene {
     this.renderer.setSize(container.clientWidth, container.clientHeight);
     container.appendChild(this.renderer.domElement);
 
-    this.camera = new THREE.PerspectiveCamera(60, container.clientWidth / container.clientHeight, 0.1, 1000);
-    this.scene.add(new THREE.AmbientLight(0xffffff, 0.6));
-    const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+    this.camera = new THREE.PerspectiveCamera(60, container.clientWidth / container.clientHeight, 0.1, 2000);
+    this.scene.add(new THREE.AmbientLight(0xffffff, 0.85));
+    const dirLight = new THREE.DirectionalLight(0xffffff, 0.9);
     dirLight.position.set(50, 50, 50);
     this.scene.add(dirLight);
+
+    // Ambient particle field around the graph for the dark neon theme.
+    const particleCount = 400;
+    const particlePositions = new Float32Array(particleCount * 3);
+    for (let i = 0; i < particleCount; i++) {
+      const radius = 150 + Math.random() * 350;
+      const theta = Math.random() * Math.PI * 2;
+      const phi = Math.acos(2 * Math.random() - 1);
+      particlePositions[i * 3] = radius * Math.sin(phi) * Math.cos(theta);
+      particlePositions[i * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta);
+      particlePositions[i * 3 + 2] = radius * Math.cos(phi);
+    }
+    const particleGeometry = new THREE.BufferGeometry();
+    particleGeometry.setAttribute("position", new THREE.BufferAttribute(particlePositions, 3));
+    this.particles = new THREE.Points(
+      particleGeometry,
+      new THREE.PointsMaterial({
+        color: 0x3fc5ff,
+        size: 1.8,
+        transparent: true,
+        opacity: 0.45,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false,
+        sizeAttenuation: true,
+      })
+    );
+    this.scene.add(this.particles);
 
     this.scene.add(this.graphGroup);
 
@@ -52,6 +80,7 @@ export class GraphScene {
 
   private renderLoop = () => {
     this.graphGroup.rotation.y += 0.0015;
+    this.particles.rotation.y -= 0.0004;
     this.selectionRing.lookAt(this.camera.position);
     this.renderer.render(this.scene, this.camera);
     this.rafId = requestAnimationFrame(this.renderLoop);
@@ -145,6 +174,8 @@ export class GraphScene {
     this.disposeGraphResources();
     this.selectionRing.geometry.dispose();
     (this.selectionRing.material as THREE.Material).dispose();
+    this.particles.geometry.dispose();
+    (this.particles.material as THREE.Material).dispose();
     this.renderer.dispose();
     this.container.removeChild(this.renderer.domElement);
   }

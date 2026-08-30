@@ -14,15 +14,25 @@ const COMMAND_LABELS: Record<string, string> = {
   Closed_Fist: "RESET",
 };
 
+// Always rendered at a fixed size — mounting/unmounting per phase made the
+// panel blink. The ring fills while arming and the label reflects the phase.
 export default function ArmingIndicator({ phase, progress, gestureLabel }: ArmingIndicatorProps) {
-  if (phase === "IDLE" || phase === "COOLDOWN") return null;
-
   const label = gestureLabel ? COMMAND_LABELS[gestureLabel] || gestureLabel : "";
   const circumference = 2 * Math.PI * 18;
-  const offset = circumference * (1 - (phase === "FIRING" ? 1 : progress));
+  const fill = phase === "FIRING" ? 1 : phase === "CANDIDATE" ? Math.min(progress, 1) : 0;
+  const offset = circumference * (1 - fill);
+
+  const text =
+    phase === "FIRING"
+      ? `${label} fired!`
+      : phase === "CANDIDATE"
+        ? `arming: ${label}`
+        : phase === "COOLDOWN"
+          ? "cooldown…"
+          : "waiting for gesture";
 
   return (
-    <div className="arming-indicator">
+    <div className={phase === "IDLE" ? "arming-indicator arming-indicator--idle" : "arming-indicator"}>
       <svg width="48" height="48" viewBox="0 0 48 48">
         <circle cx="24" cy="24" r="18" className="arming-indicator__track" />
         <circle
@@ -36,7 +46,7 @@ export default function ArmingIndicator({ phase, progress, gestureLabel }: Armin
           strokeDashoffset={offset}
         />
       </svg>
-      <span className="arming-indicator__label">{phase === "FIRING" ? `${label} fired` : `arming: ${label}`}</span>
+      <span className="arming-indicator__label">{text}</span>
     </div>
   );
 }

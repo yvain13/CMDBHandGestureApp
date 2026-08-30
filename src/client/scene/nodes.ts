@@ -14,10 +14,11 @@ export interface GraphEdgeInput {
   target: string;
 }
 
+// Neon palette for the dark "gesture particles" theme.
 const HEALTH_COLORS: Record<Health, number> = {
-  critical: 0xe5484d,
+  critical: 0xff4d5e,
   warning: 0xffb224,
-  healthy: 0x4a5568,
+  healthy: 0x34d399,
 };
 
 export const SELECTED_COLOR = 0x00d4ff;

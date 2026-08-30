@@ -41,7 +41,13 @@ export function buildGraphObjects(
   lineGeometry.setAttribute("position", new THREE.Float32BufferAttribute(linePositions, 3));
   const edgeLines = new THREE.LineSegments(
     lineGeometry,
-    new THREE.LineBasicMaterial({ color: 0x4a5568, transparent: true, opacity: 0.55 })
+    new THREE.LineBasicMaterial({
+      color: 0x38bdf8,
+      transparent: true,
+      opacity: 0.4,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+    })
   );
 
   return { mesh, edgeLines, nodeOrder };

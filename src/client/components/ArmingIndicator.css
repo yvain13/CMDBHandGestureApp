@@ -4,6 +4,12 @@
   align-items: center;
   gap: var(--now-spacing-sm);
   color: var(--now-color-text-primary);
+  width: 240px;
+  min-height: 48px;
+}
+
+.arming-indicator--idle {
+  opacity: 0.55;
 }
 
 .arming-indicator__track {
@@ -23,7 +29,7 @@
 }
 
 .arming-indicator__ring--fired {
-  stroke: #4a5568;
+  stroke: #34d399;
 }
 
 .arming-indicator__label {

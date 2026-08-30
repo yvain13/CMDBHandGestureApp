@@ -4,6 +4,7 @@
   padding: var(--now-spacing-md);
   border-radius: var(--now-border-radius-md);
   background: var(--now-color-background-primary);
+  backdrop-filter: blur(8px);
   border: 1px solid var(--now-color-border-primary);
   color: var(--now-color-text-primary);
 }

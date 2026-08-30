@@ -8,11 +8,15 @@
   --now-spacing-md: 16px;
   --now-spacing-lg: 24px;
   --now-border-radius-sm: 4px;
-  --now-color-background-primary: #ffffff;
-  --now-color-background-secondary: #f7f8fa;
-  --now-color-border-primary: #d5d9dd;
-  --now-color-text-primary: #1a202c;
-  --now-color-text-secondary: #5f6b7a;
+  --now-border-radius-md: 8px;
+  --now-color-background-primary: rgba(13, 21, 38, 0.85);
+  --now-color-background-secondary: #060913;
+  --now-color-border-primary: #24314a;
+  --now-color-text-primary: #e6edf7;
+  --now-color-text-secondary: #93a4bd;
+  --now-color-interactive-primary: #00d4ff;
+  --now-color-text-inverse: #04121c;
+  --now-color-text-negative: #ff6b74;
   position: relative;
   width: 100vw;
   height: 100vh;
@@ -74,14 +78,16 @@
 .app__canvas {
   position: absolute;
   inset: 0;
+  background: radial-gradient(ellipse at 50% 40%, #101a30 0%, #060913 75%);
 }
 
 .app__crosshair {
   position: absolute;
-  width: 12px;
-  height: 12px;
+  width: 14px;
+  height: 14px;
   border: 2px solid #00d4ff;
   border-radius: 50%;
+  box-shadow: 0 0 10px rgba(0, 212, 255, 0.8);
   transform: translate(-50%, -50%);
   pointer-events: none;
   z-index: 2;
