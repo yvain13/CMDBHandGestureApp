@@ -96,18 +96,18 @@ export function useGraphData() {
       setRootId(result.root);
       return result;
     } catch (e) {
-      const message = e instanceof Error ? e.message : String(e);
-      sampleModeRef.current = true;
-      setUsingSampleData(true);
-      setError(`Live CMDB unavailable (${message}) — showing sample data`);
-      setGraph(SAMPLE_GRAPH);
-      setRootId(SAMPLE_GRAPH.root);
-      return SAMPLE_GRAPH;
+      // /cis succeeded (we're in live mode), so a graph failure is a real,
+      // reportable error for that CI — not a reason to switch to sample data.
+      setError(e instanceof Error ? e.message : String(e));
+      return null;
     }
   }, []);
 
   const [ciList, setCIList] = useState<CIListEntry[]>([]);
 
+  // Entry point: fetch the CI list first. The graph is only fetched once the
+  // user picks a root CI. If the list itself fails, the whole app switches to
+  // the built-in sample dataset.
   const loadCIList = useCallback(async () => {
     if (sampleModeRef.current) {
       setCIList(sampleCIList());
@@ -115,9 +115,14 @@ export function useGraphData() {
     }
     try {
       setCIList(await apiGet<CIListEntry[]>("/cis"));
-    } catch {
-      // Dropdown falls back to the sample CIs; the graph fetch surfaces the error.
+    } catch (e) {
+      const message = e instanceof Error ? e.message : String(e);
+      sampleModeRef.current = true;
+      setUsingSampleData(true);
+      setError(`Live CMDB unavailable (${message}) — showing sample data`);
       setCIList(sampleCIList());
+      setGraph(SAMPLE_GRAPH);
+      setRootId(SAMPLE_GRAPH.root);
     }
   }, []);
 

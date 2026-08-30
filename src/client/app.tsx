@@ -25,9 +25,11 @@ export default function App() {
   useEffect(() => {
     if (!canvasContainerRef.current) return;
     sceneRef.current = new GraphScene(canvasContainerRef.current);
-    loadGraph().then(() => loadCIList());
+    // CI list first; the graph is fetched when the user picks a root CI.
+    // If the list fails, the hook switches everything to sample data.
+    loadCIList();
     return () => sceneRef.current?.dispose();
-  }, [loadGraph, loadCIList]);
+  }, [loadCIList]);
 
   useEffect(() => {
     if (!graph) return;
@@ -97,7 +99,7 @@ export default function App() {
   return (
     <div className="app">
       <div className="app__header">
-        <span>{rootNode ? rootNode.name : "Loading..."}</span>
+        <span>{rootNode ? rootNode.name : "No root selected"}</span>
         <select
           className="app__root-select"
           value={ciList.some((ci) => ci.id === graph?.root) ? graph!.root : ""}
@@ -126,6 +128,9 @@ export default function App() {
       </div>
       {error && <div className={usingSampleData ? "app__notice" : "app__error"}>{error}</div>}
       <div ref={canvasContainerRef} className="app__canvas" onClick={handleCanvasClick} />
+      {!graph && (
+        <div className="app__hint">Choose a root CI from the dropdown to build its dependency map</div>
+      )}
       {landmarks && landmarks[8] && (
         <div
           className="app__crosshair"
