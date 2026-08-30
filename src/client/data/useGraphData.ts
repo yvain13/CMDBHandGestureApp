@@ -1,6 +1,6 @@
 // src/client/data/useGraphData.ts
 import { useCallback, useRef, useState } from "react";
-import { SAMPLE_GRAPH, sampleCIDetail } from "./sampleData";
+import { SAMPLE_GRAPH, sampleCIDetail, sampleCIList, sampleSubgraph } from "./sampleData";
 
 export interface GraphNodeData {
   id: string;
@@ -24,6 +24,12 @@ export interface GraphResponse {
   nodes: GraphNodeData[];
   edges: GraphEdgeData[];
   truncated: boolean;
+}
+
+export interface CIListEntry {
+  id: string;
+  name: string;
+  class: string;
 }
 
 export interface CIDetail {
@@ -69,9 +75,10 @@ export function useGraphData() {
 
   const loadGraph = useCallback(async (root?: string, depth?: number) => {
     if (sampleModeRef.current) {
-      setGraph(SAMPLE_GRAPH);
-      setRootId(SAMPLE_GRAPH.root);
-      return SAMPLE_GRAPH;
+      const result = (root && sampleSubgraph(root, depth ?? 2)) || SAMPLE_GRAPH;
+      setGraph(result);
+      setRootId(result.root);
+      return result;
     }
     try {
       setError(null);
@@ -90,6 +97,21 @@ export function useGraphData() {
       setGraph(SAMPLE_GRAPH);
       setRootId(SAMPLE_GRAPH.root);
       return SAMPLE_GRAPH;
+    }
+  }, []);
+
+  const [ciList, setCIList] = useState<CIListEntry[]>([]);
+
+  const loadCIList = useCallback(async () => {
+    if (sampleModeRef.current) {
+      setCIList(sampleCIList());
+      return;
+    }
+    try {
+      setCIList(await apiGet<CIListEntry[]>("/cis"));
+    } catch {
+      // Dropdown falls back to the sample CIs; the graph fetch surfaces the error.
+      setCIList(sampleCIList());
     }
   }, []);
 
@@ -115,5 +137,16 @@ export function useGraphData() {
     if (rootId) loadGraph(rootId);
   }, [rootId, loadGraph, clearSelection]);
 
-  return { graph, selectedCI, error, usingSampleData, loadGraph, selectCI, clearSelection, reset };
+  return {
+    graph,
+    selectedCI,
+    error,
+    usingSampleData,
+    ciList,
+    loadCIList,
+    loadGraph,
+    selectCI,
+    clearSelection,
+    reset,
+  };
 }

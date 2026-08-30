@@ -355,6 +355,48 @@ const sampleIncidents: Record<string, { number: string; priority: string }[]> = 
   "sample-nas": [{ number: "INC0010053", priority: "4 - Low" }],
 };
 
+export function sampleCIList(): { id: string; name: string; class: string }[] {
+  return [...nodes]
+    .sort((a, b) => a.name.localeCompare(b.name))
+    .map((n) => ({ id: n.id, name: n.name, class: n.class }));
+}
+
+// Undirected BFS from rootId (mirrors the live /graph endpoint's behavior of
+// matching relationships in both directions), so the dropdown and EXPAND
+// gesture genuinely re-root the graph even in sample mode.
+export function sampleSubgraph(rootId: string, maxDepth = 2): GraphResponse | null {
+  if (!nodes.some((n) => n.id === rootId)) return null;
+
+  const adjacency = new Map<string, string[]>();
+  edges.forEach((e) => {
+    (adjacency.get(e.source) ?? adjacency.set(e.source, []).get(e.source)!).push(e.target);
+    (adjacency.get(e.target) ?? adjacency.set(e.target, []).get(e.target)!).push(e.source);
+  });
+
+  const depthById = new Map<string, number>([[rootId, 0]]);
+  const queue = [rootId];
+  while (queue.length > 0) {
+    const current = queue.shift()!;
+    const depth = depthById.get(current)!;
+    if (depth >= maxDepth) continue;
+    (adjacency.get(current) ?? []).forEach((neighbor) => {
+      if (!depthById.has(neighbor)) {
+        depthById.set(neighbor, depth + 1);
+        queue.push(neighbor);
+      }
+    });
+  }
+
+  return {
+    root: rootId,
+    nodes: nodes
+      .filter((n) => depthById.has(n.id))
+      .map((n) => ({ ...n, depth: depthById.get(n.id)! })),
+    edges: edges.filter((e) => depthById.has(e.source) && depthById.has(e.target)),
+    truncated: false,
+  };
+}
+
 export function sampleCIDetail(sysId: string): CIDetail | null {
   const node = nodes.find((n) => n.id === sysId);
   if (!node) return null;

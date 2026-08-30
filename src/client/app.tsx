@@ -18,15 +18,16 @@ export default function App() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const sceneRef = useRef<GraphScene | null>(null);
   const [landmarks, setLandmarks] = useState<RecognizedFrame["landmarks"]>(null);
-  const { graph, selectedCI, error, usingSampleData, loadGraph, selectCI, reset } = useGraphData();
+  const { graph, selectedCI, error, usingSampleData, ciList, loadCIList, loadGraph, selectCI, clearSelection, reset } =
+    useGraphData();
   const { state, dispatchFrame } = useGestureStateMachine(GESTURE_CONFIG);
 
   useEffect(() => {
     if (!canvasContainerRef.current) return;
     sceneRef.current = new GraphScene(canvasContainerRef.current);
-    loadGraph();
+    loadGraph().then(() => loadCIList());
     return () => sceneRef.current?.dispose();
-  }, [loadGraph]);
+  }, [loadGraph, loadCIList]);
 
   useEffect(() => {
     if (!graph) return;
@@ -84,11 +85,33 @@ export default function App() {
   const handleExpandClick = useCallback(() => {
     if (selectedCI) loadGraph(selectedCI.id, 2);
   }, [selectedCI, loadGraph]);
+  const handleRootChange = useCallback(
+    (event: React.ChangeEvent<HTMLSelectElement>) => {
+      if (!event.target.value) return;
+      clearSelection();
+      loadGraph(event.target.value, 2);
+    },
+    [clearSelection, loadGraph]
+  );
 
   return (
     <div className="app">
       <div className="app__header">
         <span>{rootNode ? rootNode.name : "Loading..."}</span>
+        <select
+          className="app__root-select"
+          value={ciList.some((ci) => ci.id === graph?.root) ? graph!.root : ""}
+          onChange={handleRootChange}
+        >
+          <option value="" disabled>
+            Choose a root CI…
+          </option>
+          {ciList.map((ci) => (
+            <option key={ci.id} value={ci.id}>
+              {ci.name} ({ci.class})
+            </option>
+          ))}
+        </select>
         <span>depth: 2</span>
         <span>
           {recognizerError

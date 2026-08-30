@@ -38,6 +38,17 @@
   z-index: 2;
 }
 
+.app__root-select {
+  max-width: 280px;
+  padding: var(--now-spacing-xs) var(--now-spacing-sm);
+  border-radius: var(--now-border-radius-sm);
+  border: 1px solid var(--now-color-border-primary);
+  background: var(--now-color-background-primary);
+  color: var(--now-color-text-primary);
+  font-size: 12px;
+  cursor: pointer;
+}
+
 .app__reset {
   padding: var(--now-spacing-xs) var(--now-spacing-sm);
   border-radius: var(--now-border-radius-sm);

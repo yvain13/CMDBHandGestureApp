@@ -2,6 +2,7 @@ import "@servicenow/sdk/global";
 import { RestApi } from "@servicenow/sdk/core";
 import { process as processGraph } from "../../server/graph/graph-handler";
 import { process as processCi } from "../../server/graph/ci-handler";
+import { process as processCiList } from "../../server/graph/ci-list-handler";
 import { restExecute } from "../acls/index.now";
 
 export const gcmdbApi = RestApi({
@@ -29,6 +30,13 @@ export const gcmdbApi = RestApi({
       path: "/ci/{sys_id}",
       method: "GET",
       script: processCi,
+    },
+    {
+      $id: Now.ID["gcmdb-route-cis"],
+      name: "cis",
+      path: "/cis",
+      method: "GET",
+      script: processCiList,
     },
   ],
 });

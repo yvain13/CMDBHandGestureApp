@@ -87,6 +87,10 @@ declare global {
                         table: 'sys_ws_operation'
                         id: '72edd6a18c7c4c38ad2698b986a8ffdc'
                     }
+                    'gcmdb-route-cis': {
+                        table: 'sys_ws_operation'
+                        id: 'd4f2368da4314a1fbd9a30137ea31257'
+                    }
                     'gcmdb-route-graph': {
                         table: 'sys_ws_operation'
                         id: '18e57d1aeebd4fe1a8d4c5dccf532dd6'
@@ -102,6 +106,10 @@ declare global {
                     'src_server_graph_ci-handler_ts': {
                         table: 'sys_module'
                         id: 'd8a97a2ee98449bf8236311125801140'
+                    }
+                    'src_server_graph_ci-list-handler_ts': {
+                        table: 'sys_module'
+                        id: '4391a3254b264d23862b7a5be3b148c4'
                     }
                     'src_server_graph_cmdb-data_ts': {
                         table: 'sys_module'
