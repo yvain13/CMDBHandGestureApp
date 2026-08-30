@@ -5,6 +5,18 @@ declare global {
         namespace Internal {
             interface Keys extends KeysRegistry {
                 explicit: {
+                    '15e7ab09834fcf1039651c29feaad3dc': {
+                        table: 'sys_scope_privilege'
+                        id: '15e7ab09834fcf1039651c29feaad3dc'
+                    }
+                    '5de7ab09834fcf1039651c29feaad3f0': {
+                        table: 'sys_scope_privilege'
+                        id: '5de7ab09834fcf1039651c29feaad3f0'
+                    }
+                    '95e7ab09834fcf1039651c29feaad3e0': {
+                        table: 'sys_scope_privilege'
+                        id: '95e7ab09834fcf1039651c29feaad3e0'
+                    }
                     bom_json: {
                         table: 'sys_module'
                         id: '57ecffd126bd474f8525939b130dc79f'
@@ -18,6 +30,10 @@ declare global {
                         table: 'sys_script_client'
                         id: '6ab4f93434e64f22a99d34c2b8ded08a'
                         deleted: true
+                    }
+                    d1e7a345834fcf1039651c29feaad3ab: {
+                        table: 'sys_scope_privilege'
+                        id: 'd1e7a345834fcf1039651c29feaad3ab'
                     }
                     'gcmdb-app-menu': {
                         table: 'sys_app_application'
