@@ -58,7 +58,7 @@ async function apiGet<T>(path: string): Promise<T> {
     let message = `Request failed: ${response.status}`;
     try {
       const body = await response.json();
-      message = body.error?.message || message;
+      message = body.result?.error?.message || body.error?.message || message;
     } catch {
       // response body wasn't JSON (e.g. an HTML error/login page)
     }
@@ -66,7 +66,15 @@ async function apiGet<T>(path: string): Promise<T> {
     throw new Error(message);
   }
   const body = await response.json();
-  return body.result as T;
+  // ServiceNow wraps the handler's body in a top-level `result`, and our
+  // handlers set { result: ... } themselves — so payloads arrive double-wrapped:
+  // { result: { result: <payload> } }.
+  const outer = body?.result;
+  const payload =
+    outer && typeof outer === "object" && !Array.isArray(outer) && "result" in outer
+      ? outer.result
+      : outer;
+  return payload as T;
 }
 
 export function useGraphData() {
@@ -114,7 +122,9 @@ export function useGraphData() {
       return;
     }
     try {
-      setCIList(await apiGet<CIListEntry[]>("/cis"));
+      const list = await apiGet<CIListEntry[]>("/cis");
+      if (!Array.isArray(list)) throw new Error("Unexpected /cis response shape");
+      setCIList(list);
     } catch (e) {
       const message = e instanceof Error ? e.message : String(e);
       sampleModeRef.current = true;
